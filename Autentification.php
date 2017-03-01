@@ -1,6 +1,11 @@
 <?php session_start(); ?>
+<<<<<<< HEAD
 <!DOCTYPE html><!--NADONNNNNNN-->
 <html lang="en">
+=======
+<!DOCTYPE html>
+<html lang="en"> <!--bite-->
+>>>>>>> 8cf8ddff06b235284a317f102bab652ad3ac4a72
 <head>
   <title>Ppe Projet</title>
   <meta charset="utf-8">
