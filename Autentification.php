@@ -1,5 +1,5 @@
 <?php session_start(); ?>
-<!DOCTYPE html>
+<!DOCTYPE html><!--MA BITE-->
 <html lang="en">
 <head>
   <title>Ppe Projet</title>
