@@ -15,27 +15,24 @@
 
 <?php
 	if (isset($_POST["login"])) {
-		$conn = new mysqli("localhost","root","","ntmppe");
-		if ($conn->connect_error) {									 // on check si la connection se fait
-			die("Connection failed: " . $conn->connect_error);
-		} else{
-			$SQL = "SELECT * FROM producteur WHERE nom='" .$_POST["login"] ."' AND mdp='" .sha1($_POST["mdp"]) ."'";
-			$result = $conn->query($SQL);
-			if ($result->num_rows>0) { // SI il y a au moins une ligne de résultat
-				$row=$result->fetch_assoc(); //range sous forme de tableau
-				$_SESSION["user"] = $row["id"]; //associe avec la variable de session
-				$_SESSION["nom"] = $row["nom"];
-				$_SESSION["prenom"] = $row["prenom"]; ?>
+		include('connectionbdd.php');
+			$rq1 = $dbh->query("SELECT * FROM user WHERE nom='" .$_POST["login"] ."' AND mdp='" .sha1($_POST["mdp"]) ."'");
+			$result = $rq1->fetch();
+			if (isset($result['nom'])) { // SI il y a au moins une ligne de résultat
+				$_SESSION["user"] = $result["id"]; //associe avec la variable de session
+				$_SESSION["nom"] = $result["nom"];
+				$_SESSION["prenom"] = $result["prenom"]; 
+				$_SESSION["role"] = $result["role"]; ?>
+				
 				<div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Succ&egrave;s!</strong> Connexion r&eacute;ussie</div>'; <!--&eacute = é en utf8-->
-			<?php 
-				$conn->close();
+			<?php
 				header('Location:index.php');
 			} else { ?>
 				<div class="alert alert-warning alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Erreur:</strong> Le login ou le mot de passe est incorrect.</div>
 			<?php }
 		}
-		$conn->close();
-	}
+		
+	
 ?>
 <div class="container">
 <form method="post" action="Autentification.php">

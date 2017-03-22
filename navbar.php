@@ -13,7 +13,10 @@
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 		<?php if (isset($_SESSION["user"])) { /* glyphicon = petites icones = lourd = <span> */?>
-			<li><a href="profil.php"><span class="glyphicon glyphicon-user"></span> <?php echo $_SESSION["nom"] ." " .$_SESSION["prenom"]; ?></a></li> 
+			<li><a href="profil.php"><span class="glyphicon glyphicon-user"></span> <?php echo $_SESSION["nom"] ." " .$_SESSION["prenom"]; ?></a></li>
+		<?php if($_SESSION["role"]==="client"){?>
+			<li><a href="commande.php"><span class="glyphicon glyphicon-user"></span> Commander</a></li>
+		<?php } ?>
 			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Se Déconnecter</a></li>
 		<?php }else{ ?>
 			<li><a href="Formulaire.php"><span class="glyphicon glyphicon-user"></span> Sinscrire</a></li>

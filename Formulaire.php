@@ -15,13 +15,13 @@
 <body style="margin-top:50px;">
 <?php
 	include 'navbar.php';
-	if(isset($_POST["nomproducteur"])){                               //isset = est-ce que cette variable existe ?
+	if(isset($_POST["nom"])){                               //isset = est-ce que cette variable existe ?
 	if($_POST["mdp"] == $_POST["mdpC"]) {
 		$conn= new mysqli("localhost","root","","ntmppe");
 		if ($conn->connect_error) {									 // on check si la connection se fait
 			die("Connection failed: " . $conn->connect_error);
 		} else{
-		$sql = "INSERT INTO producteur(nom,prenom,adresse,nomResp,prenomResp,mdp) VALUES('" .$_POST['nomproducteur'] ."','".$_POST['prenomproducteur']."','".$_POST['adressesociete']."','".$_POST['nomrespprod']."','".$_POST['prenomrespprod'] ."','" .sha1($_POST["mdp"]) ."')";																	// ATTENTION AUX TYPES DES VARIABLES  	
+		$sql = "INSERT INTO user(nom,prenom,adresse,tel,mdp,role,nomrespprod,prenomrespprod) VALUES('" .$_POST['nom']."','".$_POST['prenom']."','".$_POST['adressesociete']."','".$_POST['tel']."','".sha1($_POST["mdp"])."','".$_POST['role']."','".$_POST['nomrespprod']."','".$_POST['prenomrespprod']."')";																	// ATTENTION AUX TYPES DES VARIABLES  	
 		if ($conn->query($sql) === TRUE) {						//si la requête a été envoyée (=== implique boolean)
 			$idP = mysqli_insert_id($conn);
 			$sql2 = "INSERT INTO adherent(dateI,idProd) VALUES('" .date('Y-m-d') ."','" .$idP ."')";
@@ -50,15 +50,15 @@
 <div class="container">
 <form class="form-horizontal" method="post">
   <div class="form-group">
-    <label class=" control-label" for="nomproducteur">Nom du producteur :</label>
+    <label class=" control-label" for="nomproducteur">Nom :</label>
     <div>
-      <input type="text" class="form-control" id="nomproducteur" name="nomproducteur" required>
+      <input type="text" class="form-control" id="nom" name="nom" required>
     </div>
   </div>
   <div class="form-group">
-    <label class=" control-label" for="prenomproducteur">Prénom du producteur :</label>
+    <label class=" control-label" for="prenomproducteur">Prénom :</label>
     <div>
-      <input type="text" class="form-control" id="prenomproducteur"name="prenomproducteur" required>
+      <input type="text" class="form-control" id="prenom"name="prenom" required>
     </div>
   </div>
   <div class="form-group">
@@ -68,15 +68,27 @@
     </div>
   </div>
   <div class="form-group">
-    <label class=" control-label" for="nomrespprod">Nom du reponsable de production:</label>
+    <label class=" control-label" for="nomrespprod">Nom du reponsable de production (si producteur) :</label>
     <div >
 	    <input type="text" class="form-control" id="nomrespprod" name="nomrespprod" required>
 	</div>
   </div>
   <div class="form-group">
-	<label class="control-label" for="prenomrespprod">Prénom du reponsable de production:</label>
+	<label class="control-label" for="prenomrespprod">Prénom du reponsable de production (si producteur) :</label>
     <div>
       <input type="text" class="form-control" id="prenomrespprod" name="prenomrespprod" required>
+    </div>
+  </div>
+  <div class="form-group">
+	<label class="control-label" for="prenomrespprod">Téléphone :</label>
+    <div>
+      <input type="text" class="form-control" id="tel" name="tel" required>
+    </div>
+  </div>
+  <div class="form-group">
+	<label class="control-label" for="prenomrespprod">Rôle :</label>
+    <div>
+      <input type="text" class="form-control" id="role" name="role" required>
     </div>
   </div>
   <div class="form-group">

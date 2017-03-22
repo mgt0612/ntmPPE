@@ -12,21 +12,22 @@
 </head>
 <?php if (isset($_SESSION["user"])) {
 include 'navbar.php'; 
-$conn= new mysqli("localhost","root","","ntmppe");
-		if ($conn->connect_error) {	
-			die("Connection failed: " . $conn->connect_error);
-		} else{
-		$sql = "SELECT * FROM producteur WHERE id=" .$_SESSION["user"];
-		$result=$conn->query($sql);
-		$row=$result->fetch_assoc();
-		$sql = "SELECT * FROM adherent WHERE idProd=" .$_SESSION["user"];
-		$result=$conn->query($sql);
-		$row2=$result->fetch_assoc();
-		$sql = "SELECT * FROM certification WHERE idProd=" .$_SESSION["user"];
-		$result=$conn->query($sql);
-} } else {
-	header('Location:index.php');
-}
+include 'connectionbdd.php';
+		$rq1 = $dbh->query("SELECT * FROM user WHERE id=" .$_SESSION["user"]);
+		$result1 = $rq1->fetch();
+		
+		$rq2 = $dbh->query("SELECT * FROM adherent WHERE idProd=" .$_SESSION["user"]);
+		$result2 = $rq2->fetch();
+		
+		$rq3 = $dbh->query("SELECT * FROM certification WHERE idProd=" .$_SESSION["user"]);
+		$result3 = $rq3->fetch();
+		
+		$rq4 = $dbh->query("SELECT * FROM commande WHERE idCli=".$_SESSION['user']);
+		$result4 = $rq4->fetch();
+		}	
+	
+
+	
 
 ?>
 <body>
@@ -38,10 +39,10 @@ $conn= new mysqli("localhost","root","","ntmppe");
 		<tbody style="width:75%">
 		<tr><td>Nom:</td><td><?php echo $_SESSION["nom"];?></td></tr>
 		<tr><td>Pr&eacute;nom:</td><td><?php echo $_SESSION["prenom"];?></td></tr>
-		<tr><td>Adresse:</td><td><?php echo $row["adresse"]; ?></td></tr>
-		<tr><td>Nom du responsable:</td><td><?php echo $row["nomResp"]; ?></td></tr>
-		<tr><td>Pr&eacute;nom du responsable:</td><td><?php echo $row["prenomResp"]; ?></td></tr>
-		<tr><td>Date d'inscription:</td><td><?php echo $row2["dateI"];?></td></tr>
+		<tr><td>Adresse:</td><td><?php echo $result1["adresse"]; ?></td></tr>
+		<tr><td>Nom du responsable:</td><td><?php echo $result1["nomrespprod"]; ?></td></tr>
+		<tr><td>Pr&eacute;nom du responsable:</td><td><?php echo $result1["prenomrespprod"]; ?></td></tr>
+		<tr><td>Date d'inscription:</td><td><?php echo $result2["dateI"];?></td></tr>
 		</tbody>
 		</table>
 		<h1>Certifications</h1>
@@ -51,8 +52,16 @@ $conn= new mysqli("localhost","root","","ntmppe");
 			<tr><th>Code Certification</th><th>Libell&eacute; Certification</th></tr>
 		</thead>
 		<tbody>
-		<?php while ($row3 = $result->fetch_assoc()) { ?>
-		<tr><td><?php echo $row3["codeC"]; ?></td><td><?php echo $row3["libC"]; ?></td></tr>
+		<?php if(isset($result3['codeC'])) { ?>
+		<tr><td><?php echo $result3["codeC"]; ?></td><td><?php echo $result3["libC"]; ?></td></tr>
+		<?php } ?>
+		</tbody>
+		<thead>
+			<tr><th>Commandes</th><th>Libell&eacute; Commandes</th></tr>
+		</thead>
+		<tbody>
+		<?php if(isset($result3['codeC'])) { ?>
+		<tr><td><?php echo $result3["codeC"]; ?></td><td><?php echo $result3["libC"]; ?></td></tr>
 		<?php } ?>
 		</tbody>
 		</table>
