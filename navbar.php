@@ -17,9 +17,13 @@
 		<?php if($_SESSION["role"]==="client"){?>
 			<li><a href="commande.php"><span class="glyphicon glyphicon-user"></span> Commander</a></li>
 		<?php } ?>
+		<?php if($_SESSION["role"]==="producteur"){?>
+			<li><a href="gestionverger.php"><span class="glyphicon glyphicon-user"></span> Ajouter un verger</a></li>
+			<li><a href="livraison.php"><span class="glyphicon glyphicon-user"></span> Faire une livraison</a></li>
+		<?php } ?>
 			<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Se Déconnecter</a></li>
 		<?php }else{ ?>
-			<li><a href="Formulaire.php"><span class="glyphicon glyphicon-user"></span> Sinscrire</a></li>
+			<li><a href="Formulaire.php"><span class="glyphicon glyphicon-user"></span> Inscription</a></li>
 			<li><a href="Autentification.php"><span class="glyphicon glyphicon-log-in"></span> Se Connecter</a></li>
 		<?php } ?>
 		</ul>

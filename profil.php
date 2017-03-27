@@ -34,21 +34,33 @@ if (isset($_POST["formnom"])) {
 		}
 			
 		if(isset($_SESSION["user"])){
-		include 'navbar.php'; 
-		include 'connectionbdd.php';
-		$rq1 = $dbh->query("SELECT * FROM user WHERE id=" .$_SESSION["user"]);
-		$result1 = $rq1->fetch();
-		
-		$rq2 = $dbh->query("SELECT * FROM adherent WHERE idProd=" .$_SESSION["user"]);
-		$result2 = $rq2->fetch();
-		
-		$rq3 = $dbh->query("SELECT * FROM certification WHERE idProd=" .$_SESSION["user"]);
-		$result3 = $rq3->fetch();
-		
-		$rq4 = $dbh->query("SELECT * FROM commande WHERE idCli=".$_SESSION['user']);
-		
-		$rq5 = $dbh->query("SELECT * FROM commande WHERE idCli=".$_SESSION['user']);
-		}	
+			include 'navbar.php'; 
+			include 'connectionbdd.php';
+			$rq1 = $dbh->query("SELECT * FROM user WHERE id=" .$_SESSION["user"]);
+			$result1 = $rq1->fetch();
+			
+			$rq2 = $dbh->query("SELECT * FROM adherent WHERE idProd=" .$_SESSION["user"]);
+			$result2 = $rq2->fetch();
+			
+			$rq3 = $dbh->query("SELECT * FROM certification WHERE idProd=" .$_SESSION["user"]);
+			$result3 = $rq3->fetch();
+			
+			$rq4 = $dbh->query("SELECT * FROM commande WHERE idCli=".$_SESSION['user']); //normal qu'il y en ai 2 pareil, nécessaire au traitement
+			$rq5 = $dbh->query("SELECT * FROM commande WHERE idCli=".$_SESSION['user']);
+			
+			$rq6 = $dbh->query("SELECT * FROM verger WHERE idProd=".$_SESSION['user']); //same
+			$rq7 = $dbh->query("SELECT * FROM verger WHERE idProd=".$_SESSION['user']);
+			
+			$rq8 = $dbh->query("SELECT * FROM livraison, verger WHERE verger.idProd=".$_SESSION['user']." AND livraison.idVerger=verger.id"); //pareil
+			$rq9 = $dbh->query("SELECT * FROM livraison, verger WHERE verger.idProd=".$_SESSION['user']." AND livraison.idVerger=verger.id");
+			
+			
+		}
+
+		if(isset($_GET['SVid'])){
+			$rq8 = $dbh->query("DELETE FROM verger WHERE id=".$_GET['SVid']." AND idProd=".$_SESSION['user']);
+			header('Location: profil.php');
+		}
 		
 
 	
@@ -76,6 +88,7 @@ if (isset($_POST["formnom"])) {
 		<tr><td></td><td><button type="button" class="btn btn-info btn-block" onclick="envoiInfos();">Mettre à jour les informations</button></td></tr>
 		<br>
 		</table>
+		<br />
 		<?php if(isset($result3['codeC'])) { ?>
 		<h1>Certifications</h1>
 		<table class="table table-hover">
@@ -88,6 +101,7 @@ if (isset($_POST["formnom"])) {
 		<?php } ?>
 		</tbody>
 		</table>
+		<br />
 		<?php $var5 = $rq5->fetch(); if(isset($var5['id'])){?>
 		<h1>Commandes</h1>
 		<table class="table table-hover">
@@ -99,11 +113,46 @@ if (isset($_POST["formnom"])) {
 		<?php while($donnees4=$rq4->fetch()){?>
 			
 			<tr><td><?php echo $donnees4["id"]; ?></td><td><?php echo $donnees4["date"]; ?></td><td><?php echo $donnees4["idLP"];?> </td></tr> 
-			
+
 		<?php } ?>
 		</tbody>
-		</table>
 		<?php } ?>
+		</table>
+		<?php $var6 = $rq6->fetch(); if(isset($var6['id'])){?>
+		<h1>Vergers</h1>
+		<table class="table table-hover">
+		<br>
+		<thead>
+			<tr><th>ID Verger</th><th>Variété</th><th>Superficie</th><th>Densité</th><th>Localisation</th></tr>
+		</thead>
+		<tbody>
+		<?php while($donnees6=$rq7->fetch()){?>
+			
+			<tr><td><?php echo $donnees6["id"]; ?></td><td><?php echo $donnees6["variete"]; ?></td><td><?php echo $donnees6["superficie"];?> </td><td><?php echo $donnees6["densite"];?> </td><td><?php echo $donnees6["localisation"];?> </td><td><span type="button" class="glyphicon glyphicon-remove" onclick="supprVerger(<?php echo $donnees6['id'] ?>, <?php echo $_SESSION['user'] ?>)"></span></td></tr> 
+
+		<?php } ?>
+		</tbody>
+		<?php } ?>
+		</table>
+		<br />
+		<?php $var8 = $rq8->fetch(); if(isset($var8['id'])){?>
+		<h1>Livraisons effectuées</h1>
+		<table class="table table-hover">
+		<br>
+		<thead>
+			<tr><th>ID Livraison</th><th>Date</th><th>Type</th><th>Quantité</th><th>ID Verger</th></tr>
+		</thead>
+		<tbody>
+		<?php while($donnees9=$rq9->fetch()){?>
+			
+			<tr><td><?php echo $donnees9["idLivraison"]; ?></td><td><?php echo $donnees9["date"]; ?></td><td><?php echo $donnees9["type"];?> </td><td><?php echo $donnees9["qte"];?> </td><td><?php echo $donnees9["idVerger"];?> </td></tr> 
+
+		<?php } ?>
+		</tbody>
+		<?php } ?>
+		
+		</table>
+		
 		
 	</div>
 	
@@ -135,6 +184,15 @@ if (isset($_POST["formnom"])) {
 	  </div>
 	  <div>
 		<input type="text" id="formdate" name="formdate" required>
+	  </div>
+	</form>
+	
+	<form id="supprimerVerger" class="form-horizontal" method="get" style="visibility : hidden;">
+	  <div>
+		<input type="text" id="SVid" name="SVid" required>
+	  </div>
+	  <div>
+		<input type="text" id="SVidProd" name="SVidProd" required>
 	  </div>
 	</form>
 	
@@ -255,6 +313,13 @@ if (isset($_POST["formnom"])) {
 		
 		modifProfil.submit();
 		
+	}
+	
+	function supprVerger(idVerger, idProd){
+		SVid.setAttribute("value", idVerger);
+		SVidProd.setAttribute("value", idProd);
+		
+		supprimerVerger.submit();
 	}
 	
 	

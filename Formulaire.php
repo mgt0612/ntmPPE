@@ -31,7 +31,7 @@
 			$sql3 = "INSERT INTO certification(codeC,libC,idAdh,idProd) VALUES('LabAgriBio','Label Agriculture Biologique',"  .$idA ."," .$idP .")";
 			$conn->query($sql3); 
 			}?>
-			<div class="alert alert-success alert-dismissible" style="margin-top:-20px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Succ&egrave;s!</strong> Producteur ajout&eacute; aux adh&eacute;rents.</div>				<!--on affiche ça-->
+			<div class="alert alert-success alert-dismissible" style="margin-top:-20px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Succ&egrave;s!</strong> <?php echo $_POST['role'] ?> ajout&eacute; aux adh&eacute;rents.</div>				<!--on affiche ça-->
 		<?php } else {											// sinon
 			echo "Error: " . $sql . "<br>" . $conn->error;		// on affiche le message d'erreur
 		}
