@@ -82,7 +82,7 @@ if (isset($_POST["formnom"])) {
 		<tr id="nomresp"><td>Nom du responsable:</td><td style="text-align : center;" id="setNomresp" onclick="modif('setNomresp');"><?php echo $result1["nomrespprod"]; ?></td></tr>
 		<tr id="prenomresp"><td>Pr&eacute;nom du responsable:</td><td style="text-align : center;" id="setPrenomresp" onclick="modif('setPrenomresp');"><?php echo $result1["prenomrespprod"]; ?></td></tr>
 		<tr id="role"><td>Rôle</td><td style="text-align : center;" id="setRole" onclick="modif('setRole');"><?php echo $result1['role']; ?></td></tr>
-		<tr id="date"><td>Date d'inscription:</td><td style="text-align : center;" id="setDate" onclick="modif('setDate');"><?php echo $result2["dateI"];?></td></tr>
+		<tr id="date"><td>Date d'inscription:</td><td style="text-align : center;" id="setDate" ><?php echo $result2["dateI"];?></td></tr>
 		</tbody>
 		<br>
 		<tr><td></td><td><button type="button" class="btn btn-info btn-block" onclick="envoiInfos();">Mettre à jour les informations</button></td></tr>
